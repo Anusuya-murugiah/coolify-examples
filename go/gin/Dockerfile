@@ -1,12 +1,12 @@
-FROM golang:1.22-alpine AS build
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 go build -o server .
+FROM golang:1.22
 
-FROM alpine:latest
 WORKDIR /app
-COPY --from=build /app/server .
+
+COPY . .
+
+RUN go mod tidy
+RUN go build -o server .
+
 EXPOSE 3000
+
 CMD ["./server"]

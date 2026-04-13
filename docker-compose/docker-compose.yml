@@ -6,4 +6,4 @@ services:
   analytics:
     image: nginx
     environment:
-      - API_URL=$SERVICE_FQDN_API
+      - API_URL="https://openclawroadmap.com/use-cases-development-cicd-integration.php"

@@ -13,12 +13,32 @@ services:
       - DB_CONNECTION=postgres
       - TEST=${TEST}
       - TEST_PASSWORD=${SERVICE_PASSWORD_TEST}
+
   database-prod:
     image: postgres:14-alpine
     environment:
       - POSTGRES_DB=database
       - POSTGRES_PASSWORD=password
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
   db:
     image: nginx
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:9999
+      interval: 5s
+      timeout: 2s
+      retries: 1
+    restart: "no"
+
   another-api:
     image: nginx
